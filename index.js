@@ -1,12 +1,11 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const { connectDb } = require("./config/connection");
-
+const cors = require('cors')
 dotenv.config();
-connectDb();
-
 const app = express();
-
+connectDb();
+app.use(cors())
 app.use(express.json());
 
 app.use("/api/v1/erp", require("./routes/erpRoutes"));

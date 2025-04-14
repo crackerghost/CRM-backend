@@ -1,34 +1,34 @@
-const mysql = require("mysql2");
+const { Sequelize } = require("sequelize");
 const dotenv = require("dotenv");
-dotenv.config(); // Load environment variables from .env file
+dotenv.config();
 
-// Create a connection to the database using environment variables
-const connection = mysql.createConnection({
-  host: process.env.HOST, // MySQL host from .env
-  user: process.env.USER, // MySQL username from .env
-  password: process.env.PASS, // MySQL password from .env
-  database: process.env.DB_NAME, // MySQL database from .env
-});
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.USER,
+  process.env.PASS,
+  {
+    host: process.env.HOST,
+    dialect: "mysql",
+    logging: false,
+  }
+);
 
-const connectDb = () => {
-  connection.connect((err) => {
-    if (err) {
-      console.error("Error connecting to the database:", err.stack);
-      return;
-    }
-    console.log("Connected to the MySQL database as id " + connection.threadId);
-  });
+const connectDb = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log("Connection has been established successfully.");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
 };
 
-// Example function to close the connection
-const closeDb = () => {
-  connection.end((err) => {
-    if (err) {
-      console.error("Error closing the database connection:", err.stack);
-    } else {
-      console.log("Database connection closed.");
-    }
-  });
+const closeDb = async () => {
+  try {
+    await sequelize.close();
+    console.log("Database connection closed.");
+  } catch (error) {
+    console.error("Error closing the database connection:", error);
+  }
 };
 
-module.exports = { connectDb, connection, closeDb };
+module.exports = { connectDb, sequelize, closeDb };

@@ -1,6 +1,8 @@
 const express = require("express");
-const { create, getLabels } = require("../controllers/erpCont");
+const { create, getLabels, getData } = require("../controllers/erpCont");
+const { jwtDecrypt } = require("../middelwares/jwtDecrypt");
 const router = express.Router();
-router.route("/add-details").post(create);
-router.route("/get-labels").post(getLabels);
+
+router.route("/get-data").get(jwtDecrypt, getData);
+
 module.exports = router;
