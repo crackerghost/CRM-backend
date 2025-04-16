@@ -1,17 +1,17 @@
 const {
   getField_data,
-  fetchLabels,
+  getLabels,
   getErpData,
   getTableLabels,
 } = require("../services/getDataService");
 
 exports.getData = async (req, res) => {
-  const { page_id, form_id, page, pageSize, module } = req.query;
+  const { page_id, form_id, page, pageSize, module, query, filter } = req.query;
   const { client_id } = req.user;
   try {
-    const field_data = await getField_data(form_id);
-    const labels = await fetchLabels(page_id);
-    const erp_tabel = await getErpData(client_id, page, pageSize, module);
+    const field_data = await getField_data(form_id, client_id);
+    const labels = await getLabels(page_id);
+    const erp_tabel = await getErpData(client_id, page, pageSize, module,query,filter);
     const erp_tab_lab = await getTableLabels(page_id);
 
     res.status(200).send({

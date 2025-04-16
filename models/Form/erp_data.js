@@ -105,15 +105,6 @@ const ErpData = sequelize.define("erp", {
   },
 });
 
-async function syncModel() {
-  try {
-    await ErpData.sync({ alter: true }); // Use ErpData here instead of PageLabel
-    console.log("ErpData table has been created or updated.");
-  } catch (error) {
-    console.error("Error syncing model:", error);
-  }
-}
 
-syncModel();
 
 module.exports = ErpData;

@@ -1,26 +1,26 @@
+
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../../config/connection");
 
-const PageLabel = sequelize.define("erp_labels", {
+
+const DropDown = sequelize.define("erp_dropdown", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  page_id: {
+  client_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  label_No: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  title: {
+  col_name: {
     type: DataTypes.STRING,
     allowNull: false,
-  }
+  },
+  value: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
-
-
-module.exports = PageLabel;
+module.exports = DropDown;

@@ -21,15 +21,6 @@ const ErpTables = sequelize.define("erp_tables", {
   }
 });
 
-async function syncModel() {
-  try {
-    await ErpTables.sync({ alter: true });
-    console.log("ErpTables table has been created or updated.");
-  } catch (error) {
-    console.error("Error syncing model:", error);
-  }
-}
 
-syncModel();
 
 module.exports = ErpTables;

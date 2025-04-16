@@ -17,15 +17,4 @@ const Forms = sequelize.define("erp_forms", {
   },
 });
 
-async function syncModel() {
-  try {
-    await Forms.sync({ alter: true });
-    console.log("User table has been created or updated.");
-  } catch (error) {
-    console.error("Error syncing model:", error);
-  }
-}
-
-syncModel();
-
 module.exports = Forms;
