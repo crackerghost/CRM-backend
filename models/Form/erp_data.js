@@ -25,75 +25,79 @@ const ErpData = sequelize.define("erp", {
 
   cusName: {
     type: DataTypes.STRING(255),
-    allowNull: false,
+    allowNull: true,
   },
 
   moduleName: {
     type: DataTypes.STRING(255),
-    allowNull: false,
+    allowNull: true,
   },
 
   source: {
     type: DataTypes.STRING(255),
-    allowNull: false,
+    allowNull: true,
   },
 
   status: {
     type: DataTypes.STRING(255),
-    allowNull: false,
+    allowNull: true,
   },
 
   pContactName: {
     type: DataTypes.STRING(255),
-    allowNull: false,
+    allowNull: true,
   },
 
   pContactNumber: {
     type: DataTypes.STRING(15),
-    allowNull: false,
+    allowNull: true,
   },
 
-  town: {
+  city: {
     type: DataTypes.STRING(255),
-    allowNull: false,
+    allowNull: true,
+  },
+  state: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
   },
 
   country: {
     type: DataTypes.STRING(255),
-    allowNull: false,
+    allowNull: true,
     defaultValue: "India", // Default value as 'India'
   },
 
   product: {
     type: DataTypes.STRING(255),
-    allowNull: false,
+    allowNull: true,
   },
 
   endDate: {
     type: DataTypes.DATE,
-    allowNull: false,
+    allowNull: true,
   },
 
   liveDate: {
     type: DataTypes.DATE,
-    allowNull: false,
+    allowNull: true,
   },
 
   assignedRep: {
     type: DataTypes.STRING(255),
-    allowNull: false,
+    allowNull: true,
   },
 
   int_lvl: {
     type: DataTypes.ENUM("cold", "warm", "hot"), // Enum for interest level
-    allowNull: false,
+    allowNull: true,
   },
 
   category: {
     type: DataTypes.STRING(255),
-    allowNull: false,
+    allowNull: true,
   },
-  
+
   // Timestamps
   createdAt: {
     type: DataTypes.DATE,
@@ -104,7 +108,7 @@ const ErpData = sequelize.define("erp", {
     defaultValue: DataTypes.NOW,
   },
 });
-
-
+ 
+ErpData.sync({alter:true})
 
 module.exports = ErpData;
