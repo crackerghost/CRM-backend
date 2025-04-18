@@ -32,7 +32,7 @@ const Country = sequelize.define('countries', {
     updatedAt: 'updatedAt',  // Map to actual column names if they're not default
   });
   
-  Country.sync({alter:true})
+
 
   module.exports = Country;
   

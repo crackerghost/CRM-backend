@@ -32,7 +32,6 @@ exports.erp_Data = async (
       limit: pageSize,
       offset: offset,
     });
-    console.log(result.count)
     return {
       data: result.rows,
       totalItems: result.count,

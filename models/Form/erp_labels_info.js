@@ -1,15 +1,13 @@
-
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../../config/connection");
 
-
-const DropDown = sequelize.define("erp_dropdown", {
+const Label_Info = sequelize.define("erp_labels_info", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
   },
-  client_id: {
+  label_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
@@ -17,14 +15,8 @@ const DropDown = sequelize.define("erp_dropdown", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  value: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  color: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
 });
 
-module.exports = DropDown;
+ Label_Info.sync({alter:true})
+
+module.exports = Label_Info;

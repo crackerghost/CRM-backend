@@ -22,7 +22,7 @@ const ErpData = sequelize.define("erp", {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
-
+ 
   cusName: {
     type: DataTypes.STRING(255),
     allowNull: true,
@@ -109,6 +109,5 @@ const ErpData = sequelize.define("erp", {
   },
 });
  
-ErpData.sync({alter:true})
 
 module.exports = ErpData;
