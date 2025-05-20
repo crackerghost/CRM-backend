@@ -3,6 +3,7 @@ const Erp_Conversations = require("./erp_conversations");
 const Trails = require("./trail");
 const Attachment = require("./attachment");
 const { Sequelize } = require("sequelize");
+const gmailToken = require("./gmail");
 const db = {};
 db.Sequalize = Sequelize;
 // Associations
@@ -19,4 +20,5 @@ module.exports = {
   Erp_Conversations,
   Trails,
   Attachment,
+  gmailToken
 };
