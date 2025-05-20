@@ -1,4 +1,5 @@
-const { erp_Data } = require("../daos/erp_data");
+const { fetchAttachments } = require("../daos/erp_attachments");
+const { get_erp_Data } = require("../daos/erp_data");
 const { erp_drop_down } = require("../daos/erp_dropdown");
 const { erp_Tab_labels } = require("../daos/erp_tabels");
 const { form_field } = require("../daos/form_field");
@@ -31,7 +32,7 @@ exports.getErpData = async (
   filter
 ) => {
   try {
-    const data = await erp_Data(
+    const data = await get_erp_Data(
       client_id,
       page,
       pageSize,
@@ -60,5 +61,17 @@ exports.getDropDowns = async (client_id) => {
     return data;
   } catch (error) {
     throw new Error("Error fetching DropDown data.");
+  }
+};
+
+
+exports.Attachments = async (parent_id) => {
+  try {
+    if (!parent_id) return null;
+
+    const data = await fetchAttachments(parent_id);
+    return data;
+  } catch (error) {
+    throw new Error("Error fetching attachments.");
   }
 };

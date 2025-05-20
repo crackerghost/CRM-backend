@@ -1,5 +1,5 @@
-const PageLabel = require("../models/Form/erp_labels");
-const Label_Info = require("../models/Form/erp_labels_info");
+const PageLabel = require("../models/erp_labels");
+const Label_Info = require("../models/erp_labels_info");
 
 exports.pageLabel = async (page_id) => {
   try {

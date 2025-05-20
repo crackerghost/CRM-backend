@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const { sequelize } = require("../../config/connection");
+const { sequelize } = require("../config/connection");
 
 const State = sequelize.define("state", {
   state_code: {
@@ -27,5 +27,7 @@ const State = sequelize.define("state", {
     allowNull: true,
   },
 });
+
+
 
 module.exports = State;

@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const { sequelize } = require("../../config/connection"); // Adjust this path to your sequelize connection setup
+const { sequelize } = require("../config/connection"); // Adjust this path to your sequelize connection setup
 
 const Country = sequelize.define('countries', {
     id: {

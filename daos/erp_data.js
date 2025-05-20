@@ -1,7 +1,7 @@
 const { Op, sequelize } = require('sequelize');
-const ErpData = require("../models/Form/erp_data");
+const ErpData = require("../models/erp_data");
 
-exports.erp_Data = async (
+exports.get_erp_Data = async (
   client_id,
   page = 1,
   pageSize = 10,
@@ -15,7 +15,7 @@ exports.erp_Data = async (
 
     const whereConditions = {
       client_id: client_id,
-      moduleName: module,
+      module_name: module,
     };
 
     if (filter && query) {
@@ -31,6 +31,7 @@ exports.erp_Data = async (
       where: whereConditions,
       limit: pageSize,
       offset: offset,
+      order: [["updatedAt", "DESC"]],
     });
     return {
       data: result.rows,

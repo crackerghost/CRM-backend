@@ -1,9 +1,9 @@
 const { Op, where } = require("sequelize");
-const DropDown = require("../models/Form/erp_dropdown");
-const FormField = require("../models/Form/form_field");
-const State = require("../models/Form/state");
-const Citie = require("../models/Form/cities");
-const Country = require("../models/Form/countries");
+const DropDown = require("../models/erp_dropdown");
+const FormField = require("../models/form_field");
+const State = require("../models/state");
+const Citie = require("../models/cities");
+const Country = require("../models/countries");
 
 
 exports.form_field = async (form_id, client_id) => {

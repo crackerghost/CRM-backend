@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const { sequelize } = require("../../config/connection");
+const { sequelize } = require("../config/connection");
 
 const Label_Info = sequelize.define("erp_labels_info", {
   id: {
@@ -17,6 +17,6 @@ const Label_Info = sequelize.define("erp_labels_info", {
   },
 });
 
- Label_Info.sync({alter:true})
+
 
 module.exports = Label_Info;

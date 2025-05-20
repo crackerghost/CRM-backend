@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const { sequelize } = require("../../config/connection");
+const { sequelize } = require("../config/connection");
 
 const ErpTables = sequelize.define("erp_tables", {
   id: {

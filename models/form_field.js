@@ -1,6 +1,6 @@
 // models/FormField.js
 const { DataTypes } = require("sequelize");
-const { sequelize } = require("../../config/connection");
+const { sequelize } = require("../config/connection");
 const DropDown = require("./erp_dropdown");
 
 
@@ -30,7 +30,20 @@ const FormField = sequelize.define("erp_fields", {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
-});
+  required: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
+},
+{
+  timestamps: true,
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+}
+);
+
+
+
 
 // Define the inverse relationship
 FormField.hasMany(DropDown, { foreignKey: 'col_name', sourceKey: 'col_name' });

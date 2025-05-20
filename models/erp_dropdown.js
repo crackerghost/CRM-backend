@@ -1,6 +1,6 @@
 
 const { DataTypes } = require("sequelize");
-const { sequelize } = require("../../config/connection");
+const { sequelize } = require("../config/connection");
 
 
 const DropDown = sequelize.define("erp_dropdown", {

@@ -1,4 +1,4 @@
-const ErpTables = require("../models/Form/erp_tabels");
+const ErpTables = require("../models/erp_tabels");
 
 
 exports.erp_Tab_labels = async (page_id) => {
