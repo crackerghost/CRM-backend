@@ -17,6 +17,7 @@ const {
   createConversation,
 } = require("../services/saveDataService");
 const { upload } = require("../middelwares/upload");
+const { findByPkRecord, findRecords } = require("../utils/Sequalize");
 
 exports.getData = async (req, res) => {
   const { page_id, form_id, page, pageSize, module, query, filter } = req.query;
@@ -69,9 +70,6 @@ exports.saveData = async (req, res) => {
 
 exports.saveConversation = async (req, res) => {
   try {
-    console.log("Request body:", req.body);
-    console.log("Files received:", req.files ? req.files.length : 0);
-
     if (!req.body.parent_id || !req.user.id) {
       return res.status(400).send({ message: "Invalid data", success: false });
     }
@@ -103,7 +101,13 @@ exports.saveConversation = async (req, res) => {
       }
 
       try {
-        const attachmentResult = await saveAttachments(uploadedFiles, req, moduleName);
+        const attachmentResult = await saveAttachments(
+          uploadedFiles,
+          req,
+          moduleName,
+          saveData,
+          false
+        );
         if (!attachmentResult.success) {
           console.error("Attachment save error:", attachmentResult.message);
         }
@@ -133,11 +137,10 @@ exports.saveConversation = async (req, res) => {
   }
 };
 
-
 exports.getConversations = async (req, res) => {
   const { parent_id, module } = req.query;
   try {
-    const conversations = await Erp_Conversations.findAll({
+    const conversations = await findRecords(Erp_Conversations, {
       where: {
         parent_id: parent_id,
         module_name: module,
@@ -147,10 +150,14 @@ exports.getConversations = async (req, res) => {
           model: User,
           attributes: ["id", "first_name", "last_name", "email"],
         },
+        {
+          model: Attachment,
+        },
       ],
 
       order: [["createdAt", "DESC"]],
     });
+
     res.status(200).json(conversations);
   } catch (error) {
     console.error("Error fetching conversations:", error);
@@ -187,9 +194,9 @@ exports.saveTrail = async (req, res) => {
     const saveData = await createTrail(
       req.body.parent_id,
       req.user.id,
-      req,
       moduleName,
-      (first = false)
+      (first = false),
+      req.body.message
     );
 
     console.log(saveData);
@@ -249,7 +256,6 @@ exports.saveAttachments = async (req, res) => {
     });
   }
 };
-
 
 exports.getAttachments = async (req, res) => {
   const { parent_id } = req.query;

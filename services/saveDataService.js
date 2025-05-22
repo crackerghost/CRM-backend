@@ -43,15 +43,8 @@ exports.createConversation = async (parent_id, id, req, moduleName, first) => {
         req.body.message
       );
       const changes = `Reply to ${req.body.receiver_email}`;
-      saveData = undefined;
-      await this.createTrail(
-        saveData,
-        parent_id,
-        id,
-        moduleName,
-        false,
-        changes
-      );
+
+      await this.createTrail(parent_id, id, moduleName, false, changes);
     }
 
     return data;
@@ -61,7 +54,6 @@ exports.createConversation = async (parent_id, id, req, moduleName, first) => {
 };
 
 exports.createTrail = async (
-  savedData,
   parent_id,
   id,
   moduleName,
@@ -70,7 +62,7 @@ exports.createTrail = async (
 ) => {
   try {
     const data = await Trails.create({
-      parent_id: savedData?.id || parent_id,
+      parent_id: parent_id,
       user_id: id,
       changes: isFirst
         ? moduleName === "CRM"
@@ -86,13 +78,11 @@ exports.createTrail = async (
   }
 };
 
-exports.saveAttachments = async (files, req, moduleName) => {
+exports.saveAttachments = async (files, req, moduleName, saveData, first) => {
   try {
     if (!files || files.length === 0) {
       throw new Error("No files provided");
     }
-
-    // Check if the required data is available
     if (!req.body.parent_id) {
       throw new Error("Parent ID is missing");
     }
@@ -103,9 +93,9 @@ exports.saveAttachments = async (files, req, moduleName) => {
 
     const attachmentPromises = files.map(async (file) => {
       const fileExtension = file.url.split(".").pop().toLowerCase();
-
       const attachmentData = await Attachment.create({
         parent_id: req.body.parent_id,
+        message_id: saveData?.id || "",
         user_id: req.user.id,
         file_url: file.url,
         file_name: file.name,
@@ -113,11 +103,24 @@ exports.saveAttachments = async (files, req, moduleName) => {
         module_name: moduleName,
         message: req.body.subject || req.body.message,
       });
-
       return attachmentData;
     });
 
     const attachments = await Promise.all(attachmentPromises);
+    if (!first) {
+      const changes = saveData?.id
+        ? `Email sent to ${req.body.receiver_email}`
+        : `File uploaded > ${req.body.message}`;
+
+      await this.createTrail(
+        req.body.parent_id,
+        req.user.id,
+        moduleName,
+        false,
+        changes
+      );
+    }
+
     return {
       success: true,
       message: "Files saved successfully",

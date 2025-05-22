@@ -10,6 +10,7 @@ const Attachment = sequelize.define(
       autoIncrement: true,
     },
     parent_id: { type: DataTypes.INTEGER, allowNull: false },
+    message_id: { type: DataTypes.INTEGER, allowNull: true },
     user_id: { type: DataTypes.INTEGER, allowNull: false },
     module_name: { type: DataTypes.STRING, allowNull: false },
     message: { type: DataTypes.STRING, allowNull: false },
@@ -26,6 +27,7 @@ const Attachment = sequelize.define(
     updatedAt: "updatedAt",
   }
 );
+
 
 
 module.exports = Attachment;
