@@ -4,6 +4,7 @@ const Trails = require("./trail");
 const Attachment = require("./attachment");
 const { Sequelize } = require("sequelize");
 const gmailToken = require("./gmail");
+const Erp_Appointments = require("./appointment");
 const db = {};
 db.Sequalize = Sequelize;
 // Associations
@@ -13,6 +14,8 @@ User.hasMany(Trails, { foreignKey: "user_id", sourceKey: "id" });
 Trails.belongsTo(User, { foreignKey: "user_id", targetKey: "id" });
 User.hasMany(Attachment, { foreignKey: "user_id", sourceKey: "id" });
 Attachment.belongsTo(User, { foreignKey: "user_id", targetKey: "id" });
+User.hasMany(Erp_Appointments, { foreignKey: "user_id", sourceKey: "id" });
+Erp_Appointments.belongsTo(User, { foreignKey: "user_id", targetKey: "id" });
 Erp_Conversations.hasMany(Attachment, {
   foreignKey: "message_id",
   sourceKey: "id",
@@ -21,6 +24,7 @@ Attachment.belongsTo(Erp_Conversations, {
   foreignKey: "message_id",
   targetKey: "id",
 });
+
 module.exports = {
   db,
   User,
@@ -28,4 +32,5 @@ module.exports = {
   Trails,
   Attachment,
   gmailToken,
+  Erp_Appointments,
 };

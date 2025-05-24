@@ -1,3 +1,4 @@
+const { fethcAppointments } = require("../daos/erp_appointments");
 const { fetchAttachments } = require("../daos/erp_attachments");
 const { get_erp_Data } = require("../daos/erp_data");
 const { erp_drop_down } = require("../daos/erp_dropdown");
@@ -80,7 +81,7 @@ exports.Appointments = async (parent_id) => {
   try {
     if (!parent_id) return null;
 
-    const data = await fetchAttachments(parent_id);
+    const data = await fethcAppointments(parent_id);
     return data;
   } catch (error) {
     throw new Error("Error fetching attachments.");

@@ -1,6 +1,6 @@
 const Erp_Appointments = require("../models/appointment");
 const { createRecord, findRecords } = require("../utils/Sequalize");
-
+const dayjs = require("dayjs");
 exports.createAppointments = async (
   parent_id,
   name,
@@ -34,15 +34,42 @@ exports.createAppointments = async (
   }
 };
 
-exports.fethcAppointments = async (parent_id) => {
+exports.fetchAppointments = async (parent_id) => {
   try {
     const appointments = await findRecords(Erp_Appointments, {
-      where: {
-        parent_id: parent_id,
-      },
+      where: { parent_id },
+      order: [["createdAt", "DESC"]],
     });
 
-    return appointments;
+    const now = new Date();
+    const upcoming = [];
+    const past = [];
+
+    appointments.forEach((app) => {
+      const fullDateTime = new Date(`${app.date}T${app.time}`);
+
+      const formatted = {
+        ...app.dataValues,
+        formattedDate: dayjs(fullDateTime).format("DD MMM YYYY"),
+        formattedTime: dayjs(fullDateTime).format("hh:mm A"),
+        isUpcoming: fullDateTime >= now,
+      };
+
+      if (fullDateTime >= now) {
+        upcoming.push(formatted);
+      } else {
+        past.push(formatted);
+      }
+    });
+
+    const data = {
+      upcoming: upcoming,
+      past: past,
+    };
+
+    return {
+      data,
+    };
   } catch (error) {
     throw new Error(error);
   }
