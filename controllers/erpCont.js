@@ -1,4 +1,10 @@
-const { Erp_Conversations, User, Trails, Attachment } = require("../models");
+const {
+  Erp_Conversations,
+  User,
+  Trails,
+  Attachment,
+  gmailToken,
+} = require("../models");
 const multer = require("multer");
 const storage = multer.memoryStorage();
 const { uploadFileToS3, BUCKET_NAME } = require("../config/awsS3");
@@ -9,23 +15,34 @@ const {
   getErpData,
   getTableLabels,
   Attachments,
+  Appointments,
 } = require("../services/getDataService");
 const {
   saveAttachments,
   saveForm,
   createTrail,
   createConversation,
+  saveApp,
 } = require("../services/saveDataService");
-const { upload } = require("../middelwares/upload");
-const { findByPkRecord, findRecords } = require("../utils/Sequalize");
+const { findRecords } = require("../utils/Sequalize");
 
 exports.getData = async (req, res) => {
   const { page_id, form_id, page, pageSize, module, query, filter } = req.query;
-  const { client_id } = req.user;
+  const { client_id, email } = req.user;
 
   try {
     const field_data = await getField_data(form_id, client_id);
     const labels = await getLabels(page_id);
+    const emailConnected = await findRecords(gmailToken, {
+      where: {
+        gmail: email,
+      },
+    });
+    let isEmail = false;
+
+    if (emailConnected && emailConnected.length > 0) {
+      isEmail = true;
+    }
     const erp_tabel = await getErpData(
       client_id,
       page,
@@ -41,6 +58,7 @@ exports.getData = async (req, res) => {
       tabel_labels: erp_tab_lab,
       fields: field_data,
       labels: labels,
+      email: isEmail,
     });
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -270,5 +288,86 @@ exports.getAttachments = async (req, res) => {
     }
   } catch (error) {
     throw new Error("Error fetching attachments.");
+  }
+};
+
+exports.saveAppointments = async (req, res) => {
+  try {
+    const {
+      parent_id,
+      name,
+      created,
+      date,
+      time,
+      description,
+      mlink,
+      glink,
+      module_name,
+    } = req.body;
+
+    const { email, id } = req.user;
+
+    // Basic validation for required fields
+    if (!parent_id || !name || !date || !time || !module_name) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Required fields are missing: parent_id, name, date, time, module_name",
+      });
+    }
+
+    const savedAppointment = await saveApp(
+      parent_id,
+      name,
+      created,
+      date,
+      time,
+      description,
+      mlink,
+      glink,
+      email,
+      id,
+      module_name
+    );
+
+    return res.status(201).json({
+      success: true,
+      message: "Appointment saved successfully",
+      data: savedAppointment,
+    });
+  } catch (error) {
+    console.error("Error saving appointment:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to save appointment",
+      error: error.message,
+    });
+  }
+};
+
+exports.getAppointments = async (req, res) => {
+  try {
+    const { parent_id } = req.query;
+
+    if (!parent_id) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing required parameter: parent_id",
+      });
+    }
+
+    const appointments = await Appointments(parent_id);
+
+    return res.status(200).json({
+      success: true,
+      data: appointments,
+    });
+  } catch (error) {
+    console.error("Error fetching appointments:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch appointments",
+      error: error.message,
+    });
   }
 };

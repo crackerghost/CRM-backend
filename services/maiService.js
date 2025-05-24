@@ -18,7 +18,7 @@ exports.fetchAccessTokens = async (token) => {
         },
       }
     );
-
+    console.log(response)
     return response;
   } catch (error) {
     throw new Error(error);

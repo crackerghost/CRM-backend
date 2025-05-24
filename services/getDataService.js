@@ -75,3 +75,14 @@ exports.Attachments = async (parent_id) => {
     throw new Error("Error fetching attachments.");
   }
 };
+
+exports.Appointments = async (parent_id) => {
+  try {
+    if (!parent_id) return null;
+
+    const data = await fetchAttachments(parent_id);
+    return data;
+  } catch (error) {
+    throw new Error("Error fetching attachments.");
+  }
+};
