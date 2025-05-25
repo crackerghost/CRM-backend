@@ -1,3 +1,4 @@
+const { User } = require("../models");
 const Erp_Appointments = require("../models/appointment");
 const { createRecord, findRecords } = require("../utils/Sequalize");
 const dayjs = require("dayjs");
@@ -39,6 +40,7 @@ exports.fetchAppointments = async (parent_id) => {
     const appointments = await findRecords(Erp_Appointments, {
       where: { parent_id },
       order: [["createdAt", "DESC"]],
+      includes : User
     });
 
     const now = new Date();
