@@ -40,7 +40,7 @@ exports.fetchAppointments = async (parent_id) => {
     const appointments = await findRecords(Erp_Appointments, {
       where: { parent_id },
       order: [["createdAt", "DESC"]],
-      includes : User
+      include : [User]
     });
 
     const now = new Date();
