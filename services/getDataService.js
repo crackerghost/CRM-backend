@@ -88,4 +88,3 @@ exports.Appointments = async (parent_id) => {
     throw new Error("Error fetching attachments.");
   }
 };
-w
