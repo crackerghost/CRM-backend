@@ -40,7 +40,7 @@ exports.fetchAppointments = async (parent_id) => {
     const appointments = await findRecords(Erp_Appointments, {
       where: { parent_id },
       order: [["createdAt", "DESC"]],
-      include : [User]
+       include : [User]
     });
 
     const now = new Date();
@@ -64,13 +64,9 @@ exports.fetchAppointments = async (parent_id) => {
       }
     });
 
-    const data = {
+    return {
       upcoming: upcoming,
       past: past,
-    };
-
-    return {
-      data,
     };
   } catch (error) {
     throw new Error(error);
